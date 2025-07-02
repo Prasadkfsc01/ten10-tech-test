@@ -1,8 +1,8 @@
-Requirements
 
+## Requirements
 ## Objective: As a product owner, I want to build a responsive interest calculator web application.
 
-Features:
+## Features:
 
 - The application should provide options to choose the duration for interest calculation: Daily, Monthly, and Yearly.
 - Users should be able to input the principal amount.
@@ -36,40 +36,40 @@ The goal was to simulate end-to-end user journeys and validate both positive and
 - Focused on critical user journeys that a real user would follow.
 - Added Github actions for it to run nightly every nigth and send notifications on Slack for QA to act
 
-My Test cases
+### My Test cases
 
 Test Cases Implemented
 
 🧾 Login Functionality
-✅ Login with valid credentials
-✅ Login with invalid credentials
-✅ Logout and validate redirection
+- ✅ Login with valid credentials
+- ✅ Login with invalid credentials
+- ✅ Logout and validate redirection
 
 🧾 Registration Functionality
-✅ Register with valid credentials
-✅ (To-do) Show error when registering with already existing credentials
+- ✅ Register with valid credentials
+- ✅ (To-do) Show error when registering with already existing credentials
 
 🧾 Interest Calculator Functionality [Checks all mandatory fields (principal, rate, duration, consent)]
-✅ Happy Path: Should calculate interest correctly with valid inputs
-✅ Shows alert \`Please fill in all fields.\` when principal amount is less than 1
-✅ Should throw alert message \`Please fill in all fields.\` for missing interest rate field
+- ✅ Happy Path: Should calculate interest correctly with valid inputs
+- ✅ Shows alert \`Please fill in all fields.\` when principal amount is less than 1
+- ✅ Should throw alert message \`Please fill in all fields.\` for missing interest rate field
 
 🧾 Responsiveness Tests
-✅ Verified homepage renders correctly on:iPhone X viewport
-✅ Verified homepage renders correctly on:iPad viewport
+- ✅ Verified homepage renders correctly on:iPhone X viewport
+- ✅ Verified homepage renders correctly on:iPad viewport
 
 🧾 Homepage Navigation Links
-✅ Click on Ten10TechTest → lands on welcome page
-✅ Home → welcome page
-✅ Privacy → privacy policy
-✅ Register → registration page
-✅ Login → login page
+- ✅ Click on Ten10TechTest → lands on welcome page
+- ✅ Home → welcome page
+- ✅ Privacy → privacy policy
+- ✅ Register → registration page
+- ✅ Login → login page
 
-Notes :
-? No option to not select interest duration
-? Consent check box is not mandatory
+🧾 Notes :
+  - ? No option to not select interest duration
+  - ? Consent check box is not mandatory
 
-Time Constraints [ Could Be Improved with more time]:
+🧾 Time Constraints [ Could Be Improved with more time]:
 
 - Add negative tests for input field validations (letters in numeric fields, special characters, etc.)
 - Add retry logic wrapper for flaky selectors (if needed)
