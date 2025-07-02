@@ -1,0 +1,36 @@
+{
+  "name": "ten10-tech-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "cy:run": "npx cypress run",
+    "report:merge": "npx mochawesome-merge cypress/reports/mochawesome/*.json > mochawesome.json",
+    "report:generate": "npx marge mochawesome.json --reportDir cypress/reports/mochawesome-report --inline",
+    "regression-report": "npm run cy:run && npm run report:merge && npm run report:generate"
+  },
+  "keywords": [
+    "Ten10",
+    "Tech Test",
+    "Cypress",
+    "E2E Testing"
+  ],
+  "author": "Prasad Kotamsetti",
+  "license": "ISC",
+  "description": "Cypress end-to-end testing for Ten10 Tech Test",
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "@types/pg": "^8.15.4",
+    "cypress": "^14.5.1",
+    "cypress-mochawesome-reporter": "^3.8.2",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^5.0.0",
+    "mochawesome-report-generator": "^6.2.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "dotenv": "^17.0.1",
+    "pg": "^8.16.3"
+  }
+}

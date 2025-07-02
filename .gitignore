@@ -1,0 +1,28 @@
+# Node modules
+node_modules/
+
+# Cypress cache and artifacts
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Environment and secrets
+.env
+.env.*
+/.secrets
+/cypress.prod.env.json
+/cypress.staging.env.json
+
+# Reports and logs
+reports/
+coverage/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# VSCode settings
+.vscode/
+cypress/videos/
+mochawesome-report/
+/reports

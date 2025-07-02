@@ -1,0 +1,79 @@
+name: Ten10 regression Test suite
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-22.04 # Specifies the runner environment
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Checks out your repository code
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4 # Sets up Node.js environment
+        with:
+          node-version: '18.x' # Uses Node.js LTS version 18
+          cache: 'npm' # Caches npm dependencies
+
+      - name: Install OS dependencies for Cypress
+        run: | # Installs necessary OS libraries for Cypress to run
+          sudo apt-get update \
+          && sudo apt-get install -y xvfb libnss3 libgtk-3-0 libgbm-dev libasound2
+
+      - name: Cache Cypress binary
+        uses: actions/cache@v3 # Caches the Cypress binary to speed up runs
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-
+
+      - name: Install npm dependencies
+        run: npm install # Installs project's npm dependencies
+
+      - name: Install Cypress binary
+        run: npx cypress install # Ensures Cypress is installed
+
+      - name: Run regression tests
+        env: # Sets environment variables for the test run
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: npm run regression-report # Executes your Cypress regression tests
+
+      - name: Upload Cypress screenshots
+        if: always() # Runs even if previous steps fail
+        uses: actions/upload-artifact@v4 # Uploads screenshots as an artifact
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload test reports
+        if: always() # Runs even if previous steps fail
+        uses: actions/upload-artifact@v4 # Uploads test reports as an artifact
+        with:
+          name: test-reports
+          path: reports
+
+      # - name: Notify Slack on success
+      #   if: success() # Only runs if all previous steps succeed
+      #   uses: rtCamp/action-slack-notify@v2 # Notifies Slack channel
+      #   with:
+      #     webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     username: "Ten10 Bot"
+      #     title: "Cypress Regression Suite"
+      #     message: ":rocket: Regression suite passed"
+      #     color: ${{ job.status }}
+
+      # - name: Notify Slack on failure
+      #   if: failure() # Only runs if any previous step fails
+      #   uses: rtCamp/action-slack-notify@v2 # Notifies Slack channel
+      #   with:
+      #     webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     username: "Ten10 Bot"
+      #     title: "Cypress Regression Suite"
+      #     message: ":x: Regression suite failed"
+      #     color: ${{ job.status }}

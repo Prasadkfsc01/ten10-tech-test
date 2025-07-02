@@ -1,0 +1,5 @@
+# Ignore generated HTML from reports
+*.html linguist-generated
+*.xml linguist-generated
+cypress/videos/* linguist-generated
+cypress/screenshots/* linguist-generated
