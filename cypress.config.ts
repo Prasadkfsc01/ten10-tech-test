@@ -1,7 +1,6 @@
 import { defineConfig } from 'cypress';
 import fs from 'fs';
 
-// Helper to load env from a custom JSON file
 function loadEnvConfig(envName: string) {
   const path = `./cypress.${envName}.env.json`;
   if (fs.existsSync(path)) {
@@ -14,38 +13,39 @@ function loadEnvConfig(envName: string) {
 export default defineConfig({
   reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
-    reportDir: 'cypress/reports/mochawesome',
+    reportDir: 'reports/mochawesome',
     overwrite: false,
-    html: false,
+    html: true,
     json: true,
-  },
-  e2e: {
-    fixturesFolder: 'cypress/fixtures',
-    numTestsKeptInMemory: 0,
-    setupNodeEvents(on, config) {
-      require('cypress-mochawesome-reporter/plugin')(on);
-
-      // Load env from JSON file like cypress.staging.env.json
-      const configFile = config.env.configFile || 'staging';
-      const fileEnv = loadEnvConfig(configFile);
-
-      // Merge file env vars into Cypress config
-      config.env = {
-        ...config.env,
-        ...fileEnv,
-      };
-
-      // Set baseUrl directly (important!)
-      config.baseUrl = fileEnv.baseurl;
-
-      return config;
-    },
-    // Optional fallback in case setupNodeEvents isn't triggered
-    env: loadEnvConfig(process.env.configFile || 'staging'),
-    specPattern: 'cypress/e2e/**/*.cy.{js,ts,jsx}',
-    supportFile: 'cypress/support/index.ts',
+    embeddedScreenshots: true,
+    inlineAssets: true,
   },
   experimentalMemoryManagement: true,
   watchForFileChanges: false,
   video: true,
+
+  e2e: {
+    fixturesFolder: 'cypress/fixtures',
+    numTestsKeptInMemory: 0,
+    specPattern: 'cypress/e2e/**/*.cy.{js,ts,jsx}',
+    supportFile: 'cypress/support/index.ts',
+
+    setupNodeEvents(on, config) {
+      // 🔌 Setup reporter plugin
+      require('cypress-mochawesome-reporter/plugin')(on);
+
+      const configFile = config.env.configFile || 'staging';
+      const fileEnv = loadEnvConfig(configFile);
+
+      config.env = {
+        ...fileEnv,
+        ...config.env,
+        baseurl: process.env.BASEURL || config.env.baseurl || 'http://3.8.242.61',
+        username: process.env.USERNAME || config.env.username,
+        password: process.env.PASSWORD || config.env.password,
+      };
+
+      return config;
+    },
+  },
 });

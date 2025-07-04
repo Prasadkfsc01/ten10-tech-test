@@ -40,6 +40,7 @@ jobs:
 
       - name: Run regression tests
         env: # Sets environment variables for the test run
+          BASEURL: ${{ secrets.BASEURL }} # Base URL for the tests
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: npm run regression-report # Executes your Cypress regression tests
