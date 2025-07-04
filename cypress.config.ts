@@ -1,11 +1,18 @@
 import { defineConfig } from 'cypress';
-import dotenv from 'dotenv';
 import fs from 'fs';
 
-dotenv.config({ path: '.env' });
+// Helper to load env from a custom JSON file
+function loadEnvConfig(envName: string) {
+  const path = `./cypress.${envName}.env.json`;
+  if (fs.existsSync(path)) {
+    const envConfig = require(path);
+    return envConfig.env || {};
+  }
+  return {};
+}
 
 export default defineConfig({
-  reporter: 'cypress-mochawesome-reporter', // ✅ This stays
+  reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
     reportDir: 'cypress/reports/mochawesome',
     overwrite: false,
@@ -16,22 +23,25 @@ export default defineConfig({
     fixturesFolder: 'cypress/fixtures',
     numTestsKeptInMemory: 0,
     setupNodeEvents(on, config) {
-      require('cypress-mochawesome-reporter/plugin')(on); // ✅ plugin is now correctly aligned
+      require('cypress-mochawesome-reporter/plugin')(on);
 
+      // Load env from JSON file like cypress.staging.env.json
       const configFile = config.env.configFile || 'staging';
       const fileEnv = loadEnvConfig(configFile);
 
+      // Merge file env vars into Cypress config
       config.env = {
         ...config.env,
         ...fileEnv,
       };
 
+      // Set baseUrl directly (important!)
+      config.baseUrl = fileEnv.baseurl;
+
       return config;
     },
-    env: {
-      username: process.env.username,
-      password: process.env.password,
-    },
+    // Optional fallback in case setupNodeEvents isn't triggered
+    env: loadEnvConfig(process.env.configFile || 'staging'),
     specPattern: 'cypress/e2e/**/*.cy.{js,ts,jsx}',
     supportFile: 'cypress/support/index.ts',
   },
@@ -39,12 +49,3 @@ export default defineConfig({
   watchForFileChanges: false,
   video: true,
 });
-
-function loadEnvConfig(envName: string) {
-  const path = `./cypress.${envName}.env.json`;
-  if (fs.existsSync(path)) {
-    const envConfig = require(path);
-    return envConfig.env || {};
-  }
-  return {};
-}

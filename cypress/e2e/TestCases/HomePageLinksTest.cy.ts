@@ -4,34 +4,34 @@ import Utilities from '../Utils/utilities';
 const homePage = new HomePage();
 const utilities = new Utilities();
 
-describe('Ten10 Interest calculator home page link responses', () => {
+describe('Ten10 Interest Calculator - Navigation Tests', () => {
   beforeEach(() => {
-    cy.log('Landing on home page before each test');
+    cy.log('Visiting the Home Page');
     cy.visit(Cypress.env('baseurl'));
   });
 
-  it('Should land on Ten10TechTest page when clicked on `Ten10TechTest`', () => {
-    cy.log('Clicking on Ten10TechTest link');
-    cy.get('a.navbar-brand.text-white', { timeout: 6000 }).click({ force: true });
+  it('Should land on Ten10TechTest page when clicking the brand link', () => {
+    cy.log('Clicking on Ten10TechTest brand link');
+    homePage.clickOnTen10HomePageLink();
     utilities.assertLandingPageUrl('/');
-    cy.get('h1').should('have.text', 'Welcome to Ten10 Technical Test Website');
+    homePage.assertTen10HomePageLanding();
   });
 
-  it('Should land on Home page when clicked on `Home`', () => {
+  it('Should navigate to Home page via navbar', () => {
     homePage.clickLinkAndAssert('Home', '/', 'Welcome to Ten10 Technical Test Website');
   });
 
-  it('Should land on privacy link page when clicked on `Privacy`', () => {
+  it('Should navigate to Privacy Policy page', () => {
     homePage.clickOnPrivacyPolicyLink();
     utilities.assertLandingPageUrl('/Home/Privacy');
-    cy.get('h1').should('have.text', 'Privacy Policy');
+    homePage.assertHeaderText('Privacy Policy');
   });
 
-  it('Should land on Registration page when clicked on `Register`', () => {
+  it('Should navigate to Registration page', () => {
     homePage.clickLinkAndAssert('Register', '/Identity/Account/Register', 'Register');
   });
 
-  it('Should land on Login page when clicked on `Login`', () => {
+  it('Should navigate to Login page', () => {
     homePage.clickLinkAndAssert(
       'Login',
       '/?area=Views&page=%2FAccount%2FLogin',
@@ -40,22 +40,22 @@ describe('Ten10 Interest calculator home page link responses', () => {
   });
 });
 
-describe('Responsive - Ten10TechTest app', () => {
+describe('Ten10TechTest - Responsive Design Checks', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('baseurl'));
   });
 
-  it('Should display homepage correctly on iPhone X viewport', () => {
+  it('Should render homepage correctly on iPhone X viewport', () => {
+    cy.log('Setting viewport to iPhone X dimensions');
     cy.viewport('iphone-x');
-
-    cy.get('h1').should('be.visible').and('have.text', 'Welcome to Ten10 Technical Test Website');
-    cy.get(`button[type="button"]`).contains('Register').should('be.visible');
+    homePage.assertHeaderText('Welcome to Ten10 Technical Test Website');
+    homePage.assertLandingPageRegisterText('Register');
   });
 
-  it('Should display homepage correctly on iPad viewport', () => {
-    cy.viewport(820, 1180); // You can also use 'ipad-2' or 'ipad-mini'
-
-    cy.get('h1').should('be.visible').and('have.text', 'Welcome to Ten10 Technical Test Website');
-    cy.get(`button[type="button"]`).contains('Register').should('be.visible');
+  it('Should render homepage correctly on iPad viewport', () => {
+    cy.log('Setting viewport to iPad dimensions');
+    cy.viewport(820, 1180);
+    homePage.assertHeaderText('Welcome to Ten10 Technical Test Website');
+    homePage.assertLandingPageRegisterText('Register');
   });
 });

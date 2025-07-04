@@ -10,14 +10,12 @@ class Selectors {
     logoutButton: '#logout-container button',
   };
 
-  /*
-  interestCalculatorPage = {
-  // other selectors...
-
-  interestRateCheckbox: (ratePercent: number) => `[aria-labelledby="dropdownMenuButton"] input[id="rate-${ratePercent}%"]`,
-};
-  
-  */
+  homePageSelectors = {
+    navbarLink: 'a.nav-link.text-white',
+    navbarBrand: 'a.navbar-brand.text-white',
+    pageHeader: 'h1',
+    registerButton: 'button[type="button"]',
+  };
 
   interestCalculatorPage = {
     principalAmountSlider: 'input#customRange1',

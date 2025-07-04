@@ -5,73 +5,79 @@ import { LoginTestData } from '../../fixtures/testData';
 const loginPage = new LoginPage();
 const utilities = new Utilities();
 
-describe.skip('User Login Functionality - Positive and Negative Scenarios', () => {
+describe.skip('🔐 User Login Functionality - Positive and Negative Scenarios', () => {
   const username = Cypress.env('username');
   const password = Cypress.env('password');
   const invalidPassword = Cypress.env('invalidPassword');
+  const baseUrl = Cypress.env('baseurl');
+
   beforeEach(() => {
-    const url = Cypress.env('baseurl');
-    cy.visit(`${url}/Account/Login`);
+    cy.visit(`${baseUrl}/Account/Login`);
   });
 
-  it('Should allow login with valid credentials', () => {
-    cy.log('Assert the landing page title');
+  it('✅ Should allow login with valid credentials', () => {
+    cy.log('🧪 Asserting login page title');
     loginPage.assertTitle('Ten10TechTest');
 
-    cy.log('Login with valid credentials');
+    cy.log('🔐 Logging in with valid credentials');
     loginPage.enterLoginUsername(username);
     loginPage.enterLoginPassword(password);
     loginPage.checkRememberMe();
     loginPage.clickLogin();
 
-    cy.log('Assert successful login');
+    cy.log('✅ Valid login successful - assert username shown');
     loginPage.assertSuccessfulLogin(username);
   });
 
-  it('Should not allow login with invalid credentials', () => {
-    cy.log('Assert the landing page title');
+  it('❌ Should not allow login with invalid credentials', () => {
+    cy.log('🧪 Asserting login page title');
     loginPage.assertTitle('Ten10TechTest');
 
-    cy.log('Login with valid credentials');
+    cy.log('🔐 Attempting login with invalid password');
     loginPage.enterLoginUsername(username);
     loginPage.enterLoginPassword(invalidPassword);
     loginPage.checkRememberMe();
     loginPage.clickLogin();
 
-    cy.log('Assert Invalid login Error message');
+    cy.log('⚠️ Asserting invalid login error message');
     loginPage.assertLoginError(LoginTestData.invalidLoginErrorMessage);
   });
 
-  it('Should logout the user and redirect to login', () => {
+  it('🚪 Should logout the user and redirect to login page', () => {
+    cy.log('🔐 Performing valid login via utility');
     utilities.validLoginMethod(username, password);
-    cy.log('Assert successful login');
+
+    cy.log('✅ Assert user is logged in');
     loginPage.assertSuccessfulLogin(username);
 
-    cy.log('Click on logout button');
+    cy.log('🚪 Logging out user');
     loginPage.clickOnLogoutButton();
 
-    cy.log('Assert user is redirected to login page');
+    cy.log('🔁 Verifying redirect to login page');
     loginPage.assertTitle('Ten10TechTest');
     utilities.assertLandingPageUrl('/Account/Login');
   });
 });
 
-describe.skip('User Registration scenarios ', () => {
-  it('Should be able to register with valid credentials', () => {
-    cy.visit('http://3.8.242.61/');
+describe.skip('📝 User Registration Scenarios', () => {
+  it('✅ Should register successfully with valid credentials', () => {
+    cy.visit(`${Cypress.env('baseurl')}/`);
     loginPage.clickRegisterButtonOnHome();
 
+    cy.log('🧾 Asserting registration page header');
     loginPage.assertRegistrationPageHeader('Register');
+
+    cy.log('📝 Filling registration form');
     loginPage.enterRegisterUsername(LoginTestData.registerUsername);
     loginPage.enterRegisterPassword(LoginTestData.registerPassword);
     loginPage.enterConfirmPassword(LoginTestData.registerConfirmPassword);
 
-    cy.log('Assert registration confirmation page');
+    cy.log('🧾 Submitting form and asserting confirmation');
     loginPage.clickRegisterButtonSubmit();
     loginPage.assertRegistrationConfirmationPage();
   });
 
-  it('Should see error message for the registered user', () => {
-    // TODO - Implement the test case to check for error message when trying to register with an already registered username
+  it('Should show error when registering with an existing username', () => {
+    //  TODO: Implement test for duplicate registration scenario
   });
 });

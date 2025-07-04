@@ -9,7 +9,7 @@ cypress/downloads/
 # Environment and secrets
 .env
 .env.*
-/.secrets
+.secrets
 /cypress.prod.env.json
 /cypress.staging.env.json
 
