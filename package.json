@@ -4,9 +4,16 @@
   "main": "index.js",
   "scripts": {
     "cy:run": "npx cypress run",
+    "cy:run:chrome": "npx cypress run --browser chrome",
+    "cy:run:firefox": "npx cypress run --browser firefox",
+    "cy:run:edge": "npx cypress run --browser edge",
     "report:merge": "npx mochawesome-merge cypress/reports/mochawesome/*.json > mochawesome.json",
     "report:generate": "npx marge mochawesome.json --reportDir cypress/reports/mochawesome-report --inline",
-    "regression-report": "npm run cy:run && npm run report:merge && npm run report:generate"
+    "regression-report": "npm run cy:run && npm run report:merge && npm run report:generate",
+    "regression:chrome": "npm run cy:run:chrome && npm run report:merge && npm run report:generate",
+    "regression:firefox": "npm run cy:run:firefox && npm run report:merge && npm run report:generate",
+    "regression:edge": "npm run cy:run:edge && npm run report:merge && npm run report:generate",
+    "regression:all": "npm run regression:chrome && npm run regression:firefox && npm run regression:edge"
   },
   "keywords": [
     "Ten10",
